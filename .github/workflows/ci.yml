@@ -62,10 +62,17 @@ jobs:
           JF_USER: ${{ secrets.JFROG_USERNAME }}
           JF_PASSWORD: ${{ secrets.JFROG_PASSWORD }}
 
-      - name: Xray Docker Image Scan
+      - name: Run Xray Docker Scan and Save Report
         run: |
-          jf docker scan $JFROG_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+          mkdir -p target/xray-report
+          jf docker scan $JFROG_REGISTRY/$IMAGE_NAME:$IMAGE_TAG --output json > target/xray-report/scan-report.json
         env:
           JFROG_REGISTRY: ${{ secrets.JFROG_REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAG: ${{ env.IMAGE_TAG || 'latest' }}
+
+      - name: Upload Xray Scan Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: xray-scan-report
+          path: target/xray-report/scan-report.json
