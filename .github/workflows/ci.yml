@@ -54,3 +54,18 @@ jobs:
         run: |
           docker build -t $JFROG_REGISTRY/$IMAGE_NAME:latest .
           docker push $JFROG_REGISTRY/$IMAGE_NAME:latest
+
+      - name: Set up JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v3
+        env:
+          JF_URL: https://sidgs.jfrog.io
+          JF_USER: ${{ secrets.JFROG_USERNAME }}
+          JF_PASSWORD: ${{ secrets.JFROG_PASSWORD }}
+
+      - name: Xray Docker Image Scan
+        run: |
+          jf docker scan $JFROG_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+        env:
+          JFROG_REGISTRY: ${{ secrets.JFROG_REGISTRY }}
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG || 'latest' }}
