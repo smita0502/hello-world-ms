@@ -8,22 +8,23 @@
   <groupId>com.sidgs</groupId>
   <artifactId>helloworld</artifactId>
   <version>3.0.0</version>
-
   <name>helloworld</name>
+  <packaging>jar</packaging>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <java.version>17</java.version>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
     <sonar.projectKey>helloworld</sonar.projectKey>
     <sonar.projectName>helloworld</sonar.projectName>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -47,10 +48,6 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
         </plugin>
-<!--        <plugin>-->
-<!--          <artifactId>maven-jar-plugin</artifactId>-->
-<!--          <version>3.0.2</version>-->
-<!--        </plugin>-->
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>
@@ -98,16 +95,27 @@
         <artifactId>sonar-maven-plugin</artifactId>
         <version>3.9.1.2184</version>
       </plugin>
+
+      <!-- Jar Plugin to define the main class -->
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.0.2</version>
+        <version>3.3.0</version>
         <configuration>
           <archive>
             <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>com.sidgs.HelloWorldApplication</mainClass>
+              <mainClass>pom.App</mainClass>
             </manifest>
           </archive>
+        </configuration>
+      </plugin>
+
+      <!-- Compiler plugin to ensure proper Java version -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
         </configuration>
       </plugin>
     </plugins>
